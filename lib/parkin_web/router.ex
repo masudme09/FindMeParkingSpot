@@ -9,14 +9,38 @@ defmodule ParkinWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :browser_auth do
+    plug Parkin.AuthPipeline
+  end
+
+  pipeline :ensure_auth do
+    plug Guardian.Plug.EnsureAuthenticated
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
   scope "/", ParkinWeb do
     pipe_through :browser
+    resources "/sessions", SessionController, only: [:new, :create, :delete]
+  end
 
+  scope "/", ParkinWeb do
+    pipe_through [:browser, :browser_auth]
     get "/", PageController, :index
+  end
+
+  scope "/", ParkinWeb do
+    pipe_through [:browser, :browser_auth]
+
+    resources "/users", UserController, only: [:new, :create]
+  end
+
+  scope "/", ParkinWeb do
+    pipe_through [:browser, :browser_auth, :ensure_auth]
+
+    resources "/users", UserController, only: [:index, :edit, :show]
   end
 
   # Other scopes may use custom stacks.
