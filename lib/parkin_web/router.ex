@@ -40,7 +40,7 @@ defmodule ParkinWeb.Router do
   scope "/", ParkinWeb do
     pipe_through [:browser, :browser_auth, :ensure_auth]
 
-    resources "/users", UserController, only: [:index, :edit, :show]
+    resources "/users", UserController, only: [:index, :show, :edit, :update, :delete]
   end
 
   # Other scopes may use custom stacks.

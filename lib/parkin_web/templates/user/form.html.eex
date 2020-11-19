@@ -13,13 +13,13 @@
 
   <div class="form-group">
     <%= label user, :username, class: "control-label" %>
-    <%= text_input user, :username, class: "form-control" %>
+    <%= email_input user, :username, class: "form-control" %>
     <%= error_tag user, :username %>
   </div>
 
   <div class="form-group">
     <%= label user, :password, class: "control-label" %>
-    <%= text_input user, :password, class: "form-control" %>
+    <%= password_input user, :password, class: "form-control" %>
     <%= error_tag user, :password %>
   </div>
 

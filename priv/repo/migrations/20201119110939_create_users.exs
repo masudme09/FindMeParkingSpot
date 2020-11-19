@@ -6,6 +6,7 @@ defmodule Parkin.Repo.Migrations.CreateUsers do
       add :name, :string
       add :username, :string
       add :hashed_password, :string
+      add :license_number, :string
 
       timestamps()
     end
