@@ -28,8 +28,6 @@ defmodule WhiteBreadContext do
     |> Enum.map(fn user -> User.changeset(%User{}, user) end)
     |> Enum.each(fn changeset -> Repo.insert!(changeset) end)
 
-    changeset |> IO.puts()
-    :timer.sleep(30000)
     {:ok, state}
   end)
 
