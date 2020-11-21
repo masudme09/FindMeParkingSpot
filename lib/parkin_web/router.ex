@@ -23,6 +23,11 @@ defmodule ParkinWeb.Router do
 
   scope "/", ParkinWeb do
     pipe_through :browser
+    resources "/sessions", SessionController, only: [:new, :create]
+  end
+
+  scope "/", ParkinWeb do
+    pipe_through [:browser, :browser_auth, :ensure_auth]
     resources "/sessions", SessionController, only: [:new, :create, :delete]
   end
 

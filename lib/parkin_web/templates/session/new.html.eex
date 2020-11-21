@@ -1,3 +1,5 @@
+<h1>User Log In</h1>
+
 <%= form_for @conn, Routes.session_path(@conn, :create), [as: :session, id: "session-form"], fn session -> %>
   <div class="form-group">
     <%= label session, :username, class: "control-label" %>
