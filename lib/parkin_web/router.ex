@@ -24,6 +24,8 @@ defmodule ParkinWeb.Router do
   scope "/", ParkinWeb do
     pipe_through :browser
     resources "/sessions", SessionController, only: [:new, :create]
+    get "parking/search", ParkingsearchController, :search
+
   end
 
   scope "/", ParkinWeb do
