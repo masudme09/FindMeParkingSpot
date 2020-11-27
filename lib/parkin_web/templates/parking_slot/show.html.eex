@@ -27,6 +27,8 @@
     <%= @parking_slot.available_slots %>
   </li>
 
+
+
 </ul>
 
 <span><%= link "Edit", to: Routes.parking_slot_path(@conn, :edit, @parking_slot) %></span>

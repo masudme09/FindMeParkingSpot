@@ -25,6 +25,7 @@
   <%= number_input f, :available_slots %>
   <%= error_tag f, :available_slots %>
 
+
   <div>
     <%= submit "Save" %>
   </div>
