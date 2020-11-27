@@ -7,5 +7,5 @@ Feature: Getting price estimation for selected parking space
         Given I am in parking search page 
         And I have entered "3:30PM" as my leaving hour where current time is "1:30PM"
         When I click on submit button 
-        Then I should able to see estimated payments for available paking spaces per zone hourly vs realtime
+        Then I should able to see estimated payments for available parking spaces per zone hourly vs realtime
 
