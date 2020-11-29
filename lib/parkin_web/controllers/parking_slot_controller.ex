@@ -20,7 +20,7 @@ defmodule ParkinWeb.ParkingSlotController do
         conn
         |> put_flash(:info, "Parking slot created successfully.")
         |> redirect(to: Routes.parking_slot_path(conn, :show, parking_slot))
-
+      
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
