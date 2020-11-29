@@ -144,40 +144,50 @@ defmodule WhiteBreadContext do
 
   given_ ~r/^I am on the parking search page$/, fn state ->
     :timer.sleep(5000)
-
     navigate_to("/parking/search")
     {:ok, state}
   end
 
-  and_ ~r/^I have search for "(?<destination_address>[^"]+)" as destination location  from "(?<current_address>[^"]+)" as current location on the search page$/,
-  fn state, %{destination_address: destination_address,current_address: current_address} ->
+  and_ ~r/^I have search for "(?<destination_address>[^"]+)" as destination location on the search page$/,
+    fn state, %{destination_address: destination_address} ->
       :timer.sleep(5000)
 
       form = find_element(:id, "search-form")
       searchfld = find_within_element(form, :id, "searchtext")
-      hiddenfld = find_within_element(form, :id, "currentaddress")
-
       searchfld |> fill_field(destination_address)
-      hiddenfld |> fill_field(current_address)
-      dist = Geolocation.distance(hiddenfld,searchfld)
-      IO.puts(dist)
-      # IO.inspect(destination_address)
-      # IO.inspect(current_address)
-      # IO.puts(destination_address)
-      # IO.puts(current_address)
+
     :timer.sleep(5000)
 
     {:ok, state}
   end
 
   when_ ~r/^I click on search button$/, fn state ->
-    :timer.sleep(5000)
 
     click({:id, "submit-button"})
     {:ok, state}
   end
 
-  then_ ~r/^I should see available parking space on that location.$/, fn state ->
+  then_ ~r/^I should see available parking space summary on that location.$/, fn state ->
+    :timer.sleep(5000)
+    assert visible_in_page?(~r/Parking spaces/)
     {:ok, state}
   end
+
+  # given_ ~r/^I am on the parking summary page$/, fn state ->
+  #   {:ok, state}
+  # end
+
+  # and_ ~r/^I have selected for "(?<parking_location>[^"]+)" as parking location on the summary page$/,
+  # fn state, %{parking_location: parking_location} ->
+  #   {:ok, state}
+  # end
+
+  # when_ ~r/^I click on submit button$/, fn state ->
+  #   {:ok, state}
+  # end
+
+  # then_ ~r/^I should see parking space detail at that location.$/, fn state ->
+  #   {:ok, state}
+  # end
+
 end

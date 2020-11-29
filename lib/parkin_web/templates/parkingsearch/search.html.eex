@@ -1,13 +1,4 @@
-<%= form_for @conn, Routes.parkingsearch_path(@conn, :search),[id: "search-form"], fn f -> %>
+<%= form_for @conn, Routes.parkingsearch_path(@conn, :summary),[id: "search-form"], fn f -> %>
   <%= text_input f, :searchtext %>
   <%= submit "Search" ,id: "submit-button" %>
 <% end %>
-
-<%# <div>
-     <iframe width="500" height="400" frameborder="0" src="https://www.bing.com/maps/embed?h=400&w=500&cp=72.15457480843043~1.6840715576171927&lvl=3&typ=d&sty=r&src=SHELL&FORM=MBEDV8" scrolling="no">
-     </iframe>
-     <div style="white-space: nowrap; text-align: center; width: 500px; padding: 6px 0;">
-        <a id="largeMapLink" target="_blank" href="https://www.bing.com/maps?cp=72.15457480843043~1.6840715576171927&amp;sty=r&amp;lvl=3&amp;FORM=MBEDLD">View Larger Map</a> &nbsp; | &nbsp;
-        <a id="dirMapLink" target="_blank" href="https://www.bing.com/maps/directions?cp=72.15457480843043~1.6840715576171927&amp;sty=r&amp;lvl=3&amp;rtp=~pos.72.15457480843043_1.6840715576171927____&amp;FORM=MBEDLD">Get Directions</a>
-    </div>
-</div> %>
