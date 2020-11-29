@@ -17,6 +17,15 @@ defmodule ParkinWeb.ParkingsearchController do
     list_of_dest_distance = Summary.distance_between(lat_long,list_of_place_lat_long)
     render(conn |> put_flash(:info, "Parking spaces"), "summary.html", query: list_of_dest_distance, keyword_searched: keyword_searched)
   end
+  # <td><%= link "Select", to: Routes.parkingsearch_path(ParkinWeb.Endpoint, :summary_details, key, "latlong": lat_long, "dist": distance), class: "btn btn-default" %> </td>
+
+  def summary_details(conn,params) do
+    placename = get_in(params, ["placename"])
+    lat_long = get_in(params, ["latlong"])
+    distance = get_in(params, ["dist"])
+    payment_summary = Summary.get_zone_payment_data_from(lat_long)
+    render(conn, "summarydetails.html",payment_summary: payment_summary, placename: placename, distance: distance  )
+  end
 
 
 

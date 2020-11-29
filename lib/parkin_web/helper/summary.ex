@@ -20,7 +20,7 @@ defmodule Parkin.Helper.Summary do
   def get_zone_data_from(lat_long) do
     query = from ps in ParkingSlot,
             where: ps.loc_lat_long == ^lat_long,
-            select: [ps.zone,ps.parking_place]
+            select: [ps.zone,ps.parking_place,ps.available_slots,ps.total_slots]
     Repo.one!(query)
   end
 
@@ -28,7 +28,7 @@ defmodule Parkin.Helper.Summary do
     query = from ps in ParkingSlot,
             join: p in Pricing, on: ps.zone == p.zone,
             where: ps.loc_lat_long == ^lat_long,
-            select: [ps.parking_place,ps.zone,p.hourly,p.realtime]
+            select: [ps.parking_place,ps.loc_lat_long,ps.zone,ps.available_slots,ps.total_slots,p.hourly,p.realtime]
     Repo.one!(query)
   end
 
