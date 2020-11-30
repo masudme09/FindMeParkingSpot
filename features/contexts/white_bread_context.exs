@@ -167,27 +167,35 @@ defmodule WhiteBreadContext do
     {:ok, state}
   end
 
-  then_ ~r/^I should see available parking space summary on that location.$/, fn state ->
+  then_ ~r/^I should see available parking space summary on that location when parking slot is available.$/, fn state ->
     :timer.sleep(5000)
-    assert visible_in_page?(~r/Parking spaces/)
+    assert visible_in_page?(~r/Available Parking spaces/)
     {:ok, state}
   end
 
-  # given_ ~r/^I am on the parking summary page$/, fn state ->
+  # then_ ~r/^I should not see available parking space summary on that location when parking slot is not available.$/, fn state ->
+  #   :timer.sleep(5000)
+  #   assert visible_in_page?(~r/No Available Parking spaces/)
   #   {:ok, state}
   # end
 
-  # and_ ~r/^I have selected for "(?<parking_location>[^"]+)" as parking location on the summary page$/,
-  # fn state, %{parking_location: parking_location} ->
-  #   {:ok, state}
-  # end
+  given_ ~r/^I am on the parking summary page$/, fn state ->
+    navigate_to("/parking/summary/Veski?latlong=58.37908%2C26.70908&dist=0.608")
+    {:ok, state}
+  end
 
-  # when_ ~r/^I click on submit button$/, fn state ->
-  #   {:ok, state}
-  # end
+  when_ ~r/^I have selected parking location and I click on select button$/, fn state ->
+    find_element(:link_text, "Select Kastani")
+    |> click()
+    :timer.sleep(5000)
+    {:ok, state}
+  end
 
-  # then_ ~r/^I should see parking space detail at that location.$/, fn state ->
-  #   {:ok, state}
-  # end
+  then_ ~r/^I should see parking space detail at that location.$/, fn state ->
+    :timer.sleep(5000)
+    assert visible_in_page?(~r/Parking summary/)
+    :timer.sleep(5000)
+    {:ok, state}
+  end
 
 end

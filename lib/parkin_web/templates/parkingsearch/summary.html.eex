@@ -18,7 +18,7 @@ Location searched : <%= key = @keyword_searched %>
             <td><%= zone %></td>
             <td>(<%= lat_long %>)</td>
             <td><%= distance %></td>
-            <td><%= link "Select", to: Routes.parkingsearch_path(ParkinWeb.Endpoint, :summary_details, key, "latlong": lat_long, "dist": distance), class: "btn btn-default" %> </td>
+            <td><%= link "Select #{location_name}", to: Routes.parkingsearch_path(ParkinWeb.Endpoint, :summary_details, key, "latlong": lat_long, "dist": distance), class: "btn btn-default" %> </td>
         </tr>
 
         <% end %>
