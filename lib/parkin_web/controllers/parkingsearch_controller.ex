@@ -22,4 +22,9 @@ defmodule ParkinWeb.ParkingsearchController do
     render(conn |> put_flash(:info, "Parking summary"), "summarydetails.html",payment_summary: payment_summary, placename: placename, distance: distance  )
   end
 
+  def create(conn, _params) do
+    conn
+    |> put_flash(:info, "Available Parking spaces")
+    |> redirect(to: Routes.parkingsearch_path(conn, :search))
+  end
 end
