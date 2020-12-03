@@ -1,4 +1,58 @@
 <%= form_for @conn, Routes.parkingsearch_path(@conn, :summary),[id: "search-form"], fn f -> %>
-  <%= text_input f, :searchtext %>
+
+  <div class="form-group" id="searchBoxContainer">
+    <%= text_input f, :searchtext %>
+  </div>
+  <div id='printoutPanel'></div>
   <%= submit "Search" ,id: "submit-button" %>
 <% end %>
+<div id='myMap' style='width: 48vw; height: 65vh;'></div>
+<script type='text/javascript'>
+            function loadMapScenario() {
+                var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+                    /* No need to set credentials if already passed in URL */
+                    center: new Microsoft.Maps.Location(58.3708, 26.7147),
+                    zoom: 12
+                });
+                Microsoft.Maps.loadModule(['Microsoft.Maps.AutoSuggest','Microsoft.Maps.Directions'], function () {
+                    var options = {
+                        maxResults: 4,
+                        map: map
+                    };
+                    var manager = new Microsoft.Maps.AutosuggestManager(options);
+                    manager.attachAutosuggest('#searchtext', '#searchBoxContainer', selectedSuggestion);
+
+                    /*var directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+                    directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.transit });
+                    var waypoint1 = new Microsoft.Maps.Directions.Waypoint({ address: 'Raatuse', location: new Microsoft.Maps.Location(58.38449, 26.74078) });
+                    var waypoint2 = new Microsoft.Maps.Directions.Waypoint({ address: 'Veski', location: new Microsoft.Maps.Location(58.37952, 26.7097) });
+                    directionsManager.addWaypoint(waypoint1);
+                    directionsManager.addWaypoint(waypoint2);*/
+
+                });
+                /*Microsoft.Maps.loadModule('Microsoft.Maps.Directions', function () {
+                      var directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+                      // Set Route Mode to transit
+                      directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.transit });
+                      var waypoint1 = new Microsoft.Maps.Directions.Waypoint({ address: 'Raatuse', location: new Microsoft.Maps.Location(58.38449, 26.74078) });
+                      var waypoint2 = new Microsoft.Maps.Directions.Waypoint({ address: 'Veski', location: new Microsoft.Maps.Location(58.37952, 26.7097) });
+                      directionsManager.addWaypoint(waypoint1);
+                      directionsManager.addWaypoint(waypoint2);
+                      // Set the element in which the itinerary will be rendered
+                      //directionsManager.setRenderOptions({ itineraryContainer: document.getElementById('printoutPanel') });
+                      //directionsManager.calculateDirections();
+                  });*/
+                function selectedSuggestion(suggestionResult) {
+                    map.entities.clear();
+                    map.setView({ bounds: suggestionResult.bestView });
+                    var pushpin = new Microsoft.Maps.Pushpin(suggestionResult.location);
+                    map.entities.push(pushpin);
+                    document.getElementById('printoutPanel').innerHTML =
+                        'Suggestion: ' + suggestionResult.formattedSuggestion +
+                            '<br> Lat: ' + suggestionResult.location.latitude +
+                            '<br> Lon: ' + suggestionResult.location.longitude;
+                }
+
+            }
+</script>
+<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=Avg6Y6Q2bxNg9JmKQjKelyVssmALndKw9kZCU0ws9siu_JQb-JIsyilkLJeDH9T0&callback=loadMapScenario' async defer></script>
