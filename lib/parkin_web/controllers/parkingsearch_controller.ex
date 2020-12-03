@@ -23,9 +23,7 @@ defmodule ParkinWeb.ParkingsearchController do
       {:ok, true} ->
         render(conn |> put_flash(:error, "No available Parking spaces"), "summary.html", query: res, keyword_searched: keyword_searched)
     end
-
-  end
-
+    end
   @spec summary_details(Plug.Conn.t(), any) :: Plug.Conn.t()
   def summary_details(conn,params) do
     placename = get_in(params, ["placename"])
