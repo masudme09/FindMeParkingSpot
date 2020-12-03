@@ -184,6 +184,28 @@ defmodule WhiteBreadContext do
     {:ok, state}
   end
 
+  # given_(
+  #   ~r/^I am on the parking summary page for destination address "(?<destination_address>[^"]+)"$/,
+  #   fn state, %{destination_address: destination_address} ->
+  #     navigate_to("/parking/search")
+  #     form = find_element(:id, "search-form")
+  #     searchfld = find_within_element(form, :id, "searchtext")
+  #     searchfld |> fill_field(destination_address)
+  #     click({:id, "submit-button"})
+  #     :timer.sleep(20000)
+  #     assert visible_in_page?(~r/Available Parking spaces/)
+
+  #     {:ok, state}
+  #   end
+  # )
+
+  # when_ ~r/^I have selected parking location and I click on select button$/, fn state ->
+  # # then_ ~r/^I should not see available parking space summary on that location when parking slot is not available.$/, fn state ->
+  # #   :timer.sleep(5000)
+  # #   assert visible_in_page?(~r/No Available Parking spaces/)
+  # #   {:ok, state}
+  # # end
+
   given_(
     ~r/^I am on the parking summary page for destination address "(?<destination_address>[^"]+)"$/,
     fn state, %{destination_address: destination_address} ->
@@ -199,7 +221,9 @@ defmodule WhiteBreadContext do
     end
   )
 
-  when_ ~r/^I have selected parking location and I click on select button$/, fn state ->
+  when_(~r/^I have selected parking location and I click on select button$/, fn state ->
+    :timer.sleep(5000)
+
     find_element(:link_text, "Select Kastani")
     |> click()
 
