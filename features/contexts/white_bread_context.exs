@@ -142,13 +142,14 @@ defmodule WhiteBreadContext do
     {:ok, state}
   end)
 
-  given_ ~r/^I am on the parking search page$/, fn state ->
+  given_(~r/^I am on the parking search page$/, fn state ->
     :timer.sleep(5000)
     navigate_to("/parking/search")
     {:ok, state}
-  end
+  end)
 
-  and_ ~r/^I have search for "(?<destination_address>[^"]+)" as destination location on the search page$/,
+  and_(
+    ~r/^I have search for "(?<destination_address>[^"]+)" as destination location on the search page$/,
     fn state, %{destination_address: destination_address} ->
       :timer.sleep(5000)
 
@@ -156,23 +157,26 @@ defmodule WhiteBreadContext do
       searchfld = find_within_element(form, :id, "searchtext")
       searchfld |> fill_field(destination_address)
 
-    :timer.sleep(5000)
+      :timer.sleep(5000)
 
-    {:ok, state}
-  end
+      {:ok, state}
+    end
+  )
 
-  when_ ~r/^I click on search button$/, fn state ->
-
+  when_(~r/^I click on search button$/, fn state ->
     click({:class, "suggestLink"})
     click({:id, "submit-button"})
     {:ok, state}
-  end
+  end)
 
-  then_ ~r/^I should see available parking space summary on that location when parking slot is available.$/, fn state ->
-    :timer.sleep(5000)
-    assert visible_in_page?(~r/Available Parking spaces/)
-    {:ok, state}
-  end
+  then_(
+    ~r/^I should see available parking space summary on that location when parking slot is available.$/,
+    fn state ->
+      :timer.sleep(5000)
+      assert visible_in_page?(~r/Available Parking spaces/)
+      {:ok, state}
+    end
+  )
 
   then_ ~r/^I should not see available parking space summary on that location when parking slot is not available.$/, fn state ->
     :timer.sleep(5000)
@@ -198,15 +202,15 @@ defmodule WhiteBreadContext do
   when_ ~r/^I have selected parking location and I click on select button$/, fn state ->
     find_element(:link_text, "Select Kastani")
     |> click()
+
     :timer.sleep(5000)
     {:ok, state}
-  end
+  end)
 
-  then_ ~r/^I should see parking space detail at that location.$/, fn state ->
+  then_(~r/^I should see parking space detail at that location.$/, fn state ->
     :timer.sleep(5000)
     assert visible_in_page?(~r/Parking summary/)
     :timer.sleep(5000)
     {:ok, state}
-  end
-
+  end)
 end

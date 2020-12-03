@@ -1,5 +1,5 @@
 Feature: Interactive Search of Parking Space
-  As a user 
+  As a user
   Such that I am in parking space summary page
   I want to select available parking space into the system.
 
