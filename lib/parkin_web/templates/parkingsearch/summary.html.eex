@@ -12,7 +12,7 @@ Location searched : <%= key = @keyword_searched %>
     <tbody>
     <%= for item <- @query do %>
         <% [zone,location_name,avail,_total,lat_long,distance] = item %>
-        <%= if distance < "1.0" and avail >= 0 do %>
+        <%= if distance < "1.0" and avail > 0 do %>
           <tr>
             <td><%= location_name %></td>
             <td><%= zone %></td>
@@ -24,6 +24,7 @@ Location searched : <%= key = @keyword_searched %>
         <% end %>
 
     <% end %>
+
 
     </tbody>
   </table>

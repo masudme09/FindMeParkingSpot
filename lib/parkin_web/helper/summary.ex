@@ -33,10 +33,13 @@ defmodule Parkin.Helper.Summary do
   end
 
   def get_lat_long_of_dest_address(parking_place_name) do
-    query = from ps in ParkingSlot,
-            where: ps.parking_place == ^parking_place_name,
-            select: ps.loc_lat_long
-    Repo.one!(query)
+    # query = from ps in ParkingSlot,
+    #         where: ilike(ps.parking_place, ^"%#{parking_place_name}%"),
+    #         # where: ps.parking_place == ^parking_place_name,
+    #         select: ps.loc_lat_long
+    # Repo.one!(query)
+    [lat,long] = Parkin.Geolocation.find_location(parking_place_name)
+    "#{lat},#{long}"
   end
 
   def summary_data(dest_lat_long,list_of_destination_lat_long) do
@@ -49,8 +52,14 @@ defmodule Parkin.Helper.Summary do
   def distance_between(dest_lat_long,list_of_destination_lat_long) do
     list_of_destination_lat_long = Enum.filter(list_of_destination_lat_long, fn current_lat_long -> current_lat_long != dest_lat_long end)
     for single_lat_long_probable_destination <- list_of_destination_lat_long do
-      get_zone_data_from(single_lat_long_probable_destination) ++ [single_lat_long_probable_destination,Float.to_string(Geolocation.probable_distance(dest_lat_long,single_lat_long_probable_destination))]
+      data = get_zone_data_from(single_lat_long_probable_destination)
+      data ++ [single_lat_long_probable_destination,Float.to_string(Geolocation.probable_distance(dest_lat_long,single_lat_long_probable_destination))]
     end
+  end
+
+  def empty?([]), do: true
+  def empty?(list) when is_list(list) do
+    false
   end
 
 end
