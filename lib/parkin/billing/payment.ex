@@ -3,6 +3,12 @@ defmodule Parkin.Billing.Payment do
   import Ecto.Changeset
 
   schema "payments" do
+    belongs_to :user, Parkin.Accounts.User
+    # belongs_to :currency, Parkin.Billing.Currency
+    field :amount, :integer
+    field :status, :string
+
+    has_many :orders, Parkin.Billing.Order
 
     timestamps()
   end
@@ -10,7 +16,10 @@ defmodule Parkin.Billing.Payment do
   @doc false
   def changeset(payment, attrs) do
     payment
-    |> cast(attrs, [])
-    |> validate_required([])
+    |> cast(attrs, [:amount, :status])
+    |> cast_assoc(:user)
+    |> cast_assoc(:orders)
+    # |> cast_assoc(:currency)
+    |> validate_required([:amount, :status])
   end
 end

@@ -1,8 +1,0 @@
-<h1>Show Rate</h1>
-
-<ul>
-
-</ul>
-
-<span><%= link "Edit", to: Routes.rate_path(@conn, :edit, @rate) %></span>
-<span><%= link "Back", to: Routes.rate_path(@conn, :index) %></span>

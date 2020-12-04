@@ -1,8 +1,0 @@
-<h1>Show Invoice</h1>
-
-<ul>
-
-</ul>
-
-<span><%= link "Edit", to: Routes.invoice_path(@conn, :edit, @invoice) %></span>
-<span><%= link "Back", to: Routes.invoice_path(@conn, :index) %></span>

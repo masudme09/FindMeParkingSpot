@@ -23,12 +23,12 @@ defmodule ParkinWeb.Router do
 
   scope "/", ParkinWeb do
     pipe_through [:browser, :browser_auth, :ensure_auth]
-    resources "/orders", OrderController, only: [:new, :create, :show]
+    resources "/orders", OrderController, only: [:index, :new, :create, :show]
   end
 
   scope "/", ParkinWeb do
     pipe_through [:browser, :browser_auth, :ensure_auth]
-    resources "/payments", PaymentController, only: [:new, :create]
+    resources "/payments", PaymentController, only: [:index, :new, :create]
   end
 
   scope "/", ParkinWeb do

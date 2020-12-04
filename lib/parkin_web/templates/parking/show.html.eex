@@ -1,0 +1,8 @@
+<h1>Show Parking</h1>
+
+<ul>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.parking_path(@conn, :edit, @parking) %></span>
+<span><%= link "Back", to: Routes.parking_path(@conn, :index) %></span>

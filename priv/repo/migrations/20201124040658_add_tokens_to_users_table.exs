@@ -3,8 +3,9 @@ defmodule Parkin.Repo.Migrations.AddTokensToUsersTable do
 
   def change do
     alter table(:users) do
-      add :tokens, :integer
-      add :token_buffer, :integer
+      add :tokens, :integer, default: 1000
+      add :type, :string, default: "default"
+      # or "monthly"
     end
   end
 end
