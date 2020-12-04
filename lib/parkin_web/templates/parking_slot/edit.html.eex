@@ -1,0 +1,5 @@
+<h1>Edit Parking slot</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.parking_slot_path(@conn, :update, @parking_slot)) %>
+
+<span><%= link "Back", to: Routes.parking_slot_path(@conn, :index) %></span>
