@@ -1,0 +1,30 @@
+Location searched : <%= key = @keyword_searched %>
+<table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Location</th>
+        <th>Zone</th>
+        <th>Latitude,Longitude</th>
+        <th>Distance(in K.M)</th>
+        <th> Action </th>
+      </tr>
+    </thead>
+    <tbody>
+    <%= for item <- @query do %>
+        <% [zone,location_name,avail,_total,lat_long,distance] = item %>
+        <%= if distance < "1.0" and avail > 0 do %>
+          <tr>
+            <td><%= location_name %></td>
+            <td><%= zone %></td>
+            <td>(<%= lat_long %>)</td>
+            <td><%= distance %></td>
+            <td><%= link "Select #{location_name}", to: Routes.parkingsearch_path(ParkinWeb.Endpoint, :summary_details, key, "latlong": lat_long, "dist": distance), class: "btn btn-default" %> </td>
+        </tr>
+
+        <% end %>
+
+    <% end %>
+
+
+    </tbody>
+  </table>

@@ -1,0 +1,29 @@
+Parking Searched in area : <%=  @placename %>
+
+<table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Location</th>
+        <th>Zone</th>
+        <th>Latitude,Longitude</th>
+        <th>Distance(in K.M)</th>
+        <th>Available slots</th>
+        <th>Total slots</th>
+        <th>Hourly Payment </th>
+        <th>Realtime Payment </th>
+      </tr>
+    </thead>
+    <tbody>
+        <% [parking_place,loc_lat_long,zone,available_slots,total_slots,hourly,realtime] = @payment_summary %>
+          <tr>
+            <td><%= parking_place %></td>
+            <td><%= zone %></td>
+            <td>(<%= loc_lat_long %>)</td>
+            <td><%= @distance %></td>
+            <td><%= available_slots %></td>
+            <td><%= total_slots %></td>
+            <td><%= hourly %></td>
+            <td><%= realtime %></td>
+        </tr>
+    </tbody>
+  </table>
