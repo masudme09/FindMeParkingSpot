@@ -8,6 +8,12 @@ defmodule Parkin.Accounts.User do
     field :hashed_password, :string
     field :name, :string
     field :license_number, :string
+    field :tokens, :integer
+    field :type, :string
+
+    has_many :payments, Parkin.Billing.Payment
+    has_many :parkings, Parkin.Sales.Parking
+    has_many :orders, Parkin.Billing.Order
 
     timestamps()
   end
@@ -19,8 +25,11 @@ defmodule Parkin.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :password, :name, :license_number])
-    |> validate_required([:username, :name, :license_number])
+    |> cast(attrs, [:username, :password, :name, :license_number, :tokens, :type])
+    |> cast_assoc(:payments)
+    |> cast_assoc(:parkings)
+    |> cast_assoc(:orders)
+    |> validate_required([:username, :name, :license_number, :type])
     |> unique_constraint(:username)
     |> validate_format(:username, ~r/@/, message: "Username must be an email address!")
     |> validate_length(:password, min: 6)
