@@ -1,0 +1,35 @@
+<h1>Show Parking slot</h1>
+
+<ul>
+
+  <li>
+    <strong>Parking place:</strong>
+    <%= @parking_slot.parking_place %>
+  </li>
+
+  <li>
+    <strong>Loc lat long:</strong>
+    <%= @parking_slot.loc_lat_long %>
+  </li>
+
+  <li>
+    <strong>Zone:</strong>
+    <%= @parking_slot.zone %>
+  </li>
+
+  <li>
+    <strong>Total slots:</strong>
+    <%= @parking_slot.total_slots %>
+  </li>
+
+  <li>
+    <strong>Available slots:</strong>
+    <%= @parking_slot.available_slots %>
+  </li>
+
+
+
+</ul>
+
+<span><%= link "Edit", to: Routes.parking_slot_path(@conn, :edit, @parking_slot) %></span>
+<span><%= link "Back", to: Routes.parking_slot_path(@conn, :index) %></span>
