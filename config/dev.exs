@@ -3,9 +3,9 @@ use Mix.Config
 # Configure your database
 config :parkin, Parkin.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "asd2020",
   database: "parkin_dev",
-  hostname: "localhost",
+  hostname: "elixirdb.llllll.cloud",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

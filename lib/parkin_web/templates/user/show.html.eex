@@ -20,6 +20,10 @@
     <strong>License Number:</strong>
     <%= @user.license_number %>
   </li>
+  <li>
+    <strong>Type:</strong>
+    <%= @user.type %>
+  </li>
 
 </ul>
 

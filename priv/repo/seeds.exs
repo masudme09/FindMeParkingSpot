@@ -98,8 +98,9 @@ alias Parkin.{
 
 [
   %{
-    name: "Real Time",
-    desc: "Real Time Parking",
+    name: "A - Real Time",
+    desc: "Zone A Real Time Parking",
+    zone: "A",
     type: "realtime",
     duration: 1,
     price: 1,
@@ -107,11 +108,32 @@ alias Parkin.{
     status: "active"
   },
   %{
-    name: "Hourly",
-    desc: "Hourly Parking Service",
+    name: "A - Hourly",
+    desc: "Zone A Hourly Parking Service",
+    zone: "A",
     type: "hourly",
     duration: 60,
     price: 50,
+    # currency: "TOK",
+    status: "active"
+  },
+  %{
+    name: "B - Real Time",
+    desc: "Zone B Real Time Parking",
+    zone: "B",
+    type: "realtime",
+    duration: 1,
+    price: 2,
+    # currency: "TOK",
+    status: "active"
+  },
+  %{
+    name: "B - Hourly",
+    desc: "Zone B Hourly Parking Service",
+    zone: "B",
+    type: "hourly",
+    duration: 60,
+    price: 100,
     # currency: "TOK",
     status: "active"
   }
@@ -162,6 +184,7 @@ alias Parkin.{
   %Service{
     name: data[:name],
     desc: data[:desc],
+    zone: data[:zone],
     type: data[:type],
     duration: data[:duration],
     price: data[:price],

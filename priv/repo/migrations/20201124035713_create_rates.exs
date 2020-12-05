@@ -3,9 +3,9 @@ defmodule Parkin.Repo.Migrations.CreateRates do
 
   def change do
     create table(:rates) do
-      add :from_currency_id, references(:currencies)
-      add :to_currency_id, references(:currencies)
       add :rate, :integer
+      add :currency_from_id, references(:currencies)
+      add :currency_to_id, references(:currencies)
 
       timestamps()
     end

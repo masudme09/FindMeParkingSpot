@@ -8,5 +8,7 @@ defmodule Parkin.Repo.Migrations.CreateCurrencies do
 
       timestamps()
     end
+
+    create unique_index(:currencies, [:name, :code])
   end
 end

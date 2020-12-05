@@ -12,6 +12,7 @@ defmodule Parkin.Billing.Order do
     # field :start, :utc_datetime
     # field :end, :utc_datetime
     belongs_to :payment, Parkin.Billing.Payment
+    field :loc_lat_long, :string
     field :comment, :string
     field :status, :string
 
@@ -24,12 +25,12 @@ defmodule Parkin.Billing.Order do
   @doc false
   def changeset(order, attrs) do
     order
-    |> cast(attrs, [:comment, :status])
+    |> cast(attrs, [:loc_lat_long, :comment, :status])
     |> cast_assoc(:user)
     |> cast_assoc(:service)
     |> cast_assoc(:payment)
     |> cast_assoc(:parkings)
     # |> cast_assoc(:currency)
-    |> validate_required([:comment, :status])
+    |> validate_required([:loc_lat_long])
   end
 end
