@@ -237,4 +237,28 @@ defmodule WhiteBreadContext do
     :timer.sleep(5000)
     {:ok, state}
   end)
+
+  given_ ~r/^I am in parking summary page $/, fn state ->
+    {:ok, state}
+  end
+
+  and_ ~r/^I have selected "(?<argument_one>[^"]+)" as my parking space$/,
+  fn state, %{argument_one: _argument_one} ->
+  {:ok, state}
+  end
+
+  and_ ~r/^I have entered "(?<argument_one>[^"]+)" as my leaving hour and start time is "(?<argument_two>[^"]+)"$/,
+  fn state, %{argument_one: _argument_one,argument_two: _argument_two} ->
+  {:ok, state}
+  end
+
+  when_ ~r/^I click on submit button $/, fn state ->
+    {:ok, state}
+  end
+
+  then_ ~r/^I should able to see message "(?<argument_one>[^"]+)"$/,
+  fn state, %{argument_one: _argument_one} ->
+    {:ok, state}
+  end
+
 end
