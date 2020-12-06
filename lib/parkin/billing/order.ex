@@ -15,6 +15,7 @@ defmodule Parkin.Billing.Order do
     field :loc_lat_long, :string
     field :comment, :string
     field :status, :string
+    field :payment_status, :string
 
     has_many :parkings, Parkin.Sales.Parking
     # has_many :payments, Parkin.Billing.Payment
@@ -25,7 +26,7 @@ defmodule Parkin.Billing.Order do
   @doc false
   def changeset(order, attrs) do
     order
-    |> cast(attrs, [:loc_lat_long, :comment, :status])
+    |> cast(attrs, [:loc_lat_long, :comment, :status, :payment_status])
     |> cast_assoc(:user)
     |> cast_assoc(:service)
     |> cast_assoc(:payment)

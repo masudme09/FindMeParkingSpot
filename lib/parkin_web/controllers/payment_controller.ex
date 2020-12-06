@@ -9,7 +9,8 @@ defmodule ParkinWeb.PaymentController do
     render(conn, "index.html", payments: payments)
   end
 
-  def new(conn, _params) do
+  def new(conn, params) do
+    order_id = params["order_id"]
     changeset = Billing.change_payment(%Payment{})
     render(conn, "new.html", changeset: changeset)
   end

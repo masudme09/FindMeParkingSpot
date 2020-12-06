@@ -11,6 +11,7 @@
       <th>To</th>
       <th>Price</th>
       <th>Status</th>
+      <th>Payment</th>
       <th>Extend</th>
       <th>Pay</th>
     </tr>
@@ -25,9 +26,10 @@
       <td><%= parking.end %></td>
       <td>$<%= parking.price %></td>
       <td><%= parking.order.status %></td>
-      <td><span><%= link "Extend", to: Routes.parking_path(@conn, :show, parking) %></span></td>
+      <td><%= parking.order.payment_status %></td>
+      <td><span><%= link "Extend", to: Routes.parking_path(@conn, :new, ["loc_lat_long": parking.order.loc_lat_long]) %></span></td>
       <td>
-        <span><%= link "Pay", to: Routes.parking_path(@conn, :show, parking) %></span>
+        <span><%= link "Pay", to: Routes.payment_path(@conn, :new, ["order_id": parking.order.id]) %></span>
       </td>
     </tr>
 <% end %>

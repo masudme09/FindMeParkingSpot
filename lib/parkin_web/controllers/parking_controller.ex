@@ -1,6 +1,8 @@
 defmodule ParkinWeb.ParkingController do
   use ParkinWeb, :controller
 
+  import Ecto.Query
+
   alias Parkin.Sales
   alias Parkin.Sales.Parking
   alias Parkin.Sales.Service
@@ -51,20 +53,36 @@ defmodule ParkinWeb.ParkingController do
           slot
       end
 
-    case slot.reserved_slots + slot.available_slots - slot.total_slots >= slot.slot_buffer do
-      true ->
-        conn
-        |> put_flash(:error, "No free spaces left")
-        |> redirect(to: Routes.parkingsearch_path(conn, :search))
+    user = Parkin.Authentication.load_current_user(conn)
 
-      _ ->
-        nil
-    end
+    order =
+      Repo.get_by(Parkin.Billing.Order,
+        user_id: user.id,
+        status: "active"
+      )
+      |> Repo.preload(
+        service: :orders,
+        parkings:
+          Ecto.Query.from(
+            a in Parkin.Sales.Parking,
+            order_by: [desc: a.inserted_at]
+          )
+      )
 
-    changeset =
-      Sales.change_parking(%Parking{
-        type: "realtime",
-        slot:
+    slot_field =
+      case order != nil do
+        true ->
+          Enum.join(
+            [
+              slot.parking_place,
+              "| Order",
+              order.id,
+              "Extension "
+            ],
+            " "
+          )
+
+        _ ->
           Enum.join(
             [
               slot.parking_place,
@@ -74,9 +92,52 @@ defmodule ParkinWeb.ParkingController do
               slot.total_slots
             ],
             " "
-          ),
+          )
+      end
+
+    startend =
+      case order != nil do
+        true -> List.first(order.parkings).end
+        _ -> DateTime.utc_now()
+      end
+
+    order_type =
+      case order != nil do
+        true -> order.service.type
+        _ -> "realtime"
+      end
+
+    changeset =
+      Sales.change_parking(%Parking{
+        type: order_type,
+        start: startend,
+        end: startend,
+        slot: slot_field,
         loc_lat_long: loc_lat_long
       })
+
+    IO.inspect(order)
+
+    case slot.reserved_slots + slot.available_slots - slot.total_slots >= slot.slot_buffer and
+           order == nil do
+      true ->
+        conn
+        |> put_flash(:error, "No free spaces left")
+        |> redirect(to: Routes.parkingsearch_path(conn, :search))
+
+      _ ->
+        nil
+    end
+
+    case order.loc_lat_long != loc_lat_long do
+      true ->
+        conn
+        |> put_flash(:error, "You have active parking in another slot")
+        |> redirect(to: Routes.parkingsearch_path(conn, :search))
+
+      _ ->
+        slot
+    end
 
     render(conn, "new.html", changeset: changeset)
   end
@@ -265,7 +326,19 @@ defmodule ParkinWeb.ParkingController do
           |> redirect(to: Routes.parkingsearch_path(conn, :search))
       end
 
-    order = Repo.get_by(Parkin.Billing.Order, user_id: user.id, status: "active")
+    order =
+      Repo.get_by(Parkin.Billing.Order,
+        user_id: user.id,
+        status: "active"
+      )
+      |> Repo.preload(
+        service: :orders,
+        parkings:
+          Ecto.Query.from(
+            a in Parkin.Sales.Parking,
+            order_by: [desc: a.inserted_at]
+          )
+      )
 
     order =
       case order do
@@ -277,15 +350,38 @@ defmodule ParkinWeb.ParkingController do
               payment_id: nil,
               loc_lat_long: parking_params["loc_lat_long"],
               comment: slot.parking_place,
-              status: "active"
+              status: "active",
+              payment_status: "pending"
             })
 
           changeset = Parkin.Billing.Order.changeset(order_struct, %{})
           Repo.insert!(changeset)
 
         _ ->
-          order
-          # ELSE -> get latest parking dates for comparison
+          case DateTime.compare(start_dt, List.first(order.parkings).end) do
+            :lt ->
+              # unlock
+              slot =
+                Parkin.ParkingSearch.ParkingSlot.changeset(slot)
+                |> Ecto.Changeset.put_change(:lock, nil)
+
+              case Repo.update(slot) do
+                {:ok, slot} ->
+                  slot
+
+                _ ->
+                  conn
+                  |> put_flash(:error, "Something has gone horribly wrong")
+                  |> redirect(to: Routes.parkingsearch_path(conn, :search))
+              end
+
+              conn
+              |> put_flash(:error, "Selected start date is before current order end date")
+              |> redirect(to: Routes.parking_path(conn, :index))
+
+            _ ->
+              order
+          end
       end
 
     parking_params = Map.put(parking_params, "order_id", order.id)
@@ -306,8 +402,6 @@ defmodule ParkinWeb.ParkingController do
           |> put_flash(:error, "Something has gone horribly wrong")
           |> redirect(to: Routes.parkingsearch_path(conn, :search))
       end
-
-    # if current order active - compare dates
 
     case Sales.create_parking(parking_params) do
       {:ok, parking} ->
