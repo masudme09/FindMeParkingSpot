@@ -4,15 +4,30 @@
   <thead>
     <tr>
 
-      <th></th>
+      <th>Place</th>
+      <th>Zone / Type</th>
+      <th>LocLatLong</th>
+      <th>From</th>
+      <th>To</th>
+      <th>Price</th>
+      <th>Status</th>
+      <th>Extend</th>
+      <th>Pay</th>
     </tr>
   </thead>
   <tbody>
 <%= for parking <- @parkings do %>
     <tr>
-
+      <td><%= parking.order.comment %></td>
+      <td><%= parking.service.name %></td>
+      <td><%= parking.order.loc_lat_long %></td>
+      <td><%= parking.start %></td>
+      <td><%= parking.end %></td>
+      <td>$<%= parking.price %></td>
+      <td><%= parking.order.status %></td>
+      <td><span><%= link "Extend", to: Routes.parking_path(@conn, :show, parking) %></span></td>
       <td>
-        <span><%= link "Show", to: Routes.parking_path(@conn, :show, parking) %></span>
+        <span><%= link "Pay", to: Routes.parking_path(@conn, :show, parking) %></span>
       </td>
     </tr>
 <% end %>

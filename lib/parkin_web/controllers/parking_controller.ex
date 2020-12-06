@@ -7,7 +7,13 @@ defmodule ParkinWeb.ParkingController do
   alias Parkin.Repo
 
   def index(conn, _params) do
-    parkings = Sales.list_parkings()
+    parkings =
+      Sales.list_parkings()
+      |> Repo.preload(
+        order: :parkings,
+        service: :parkings
+      )
+
     render(conn, "index.html", parkings: parkings)
   end
 
@@ -270,19 +276,7 @@ defmodule ParkinWeb.ParkingController do
               service_id: service.id,
               payment_id: nil,
               loc_lat_long: parking_params["loc_lat_long"],
-              comment:
-                Enum.join(
-                  [
-                    slot.parking_place,
-                    "|",
-                    service.name,
-                    "| Free: ",
-                    slot.available_slots,
-                    " / ",
-                    slot.total_slots
-                  ],
-                  " "
-                ),
+              comment: slot.parking_place,
               status: "active"
             })
 
@@ -335,7 +329,7 @@ defmodule ParkinWeb.ParkingController do
 
         conn
         |> put_flash(:info, "Parking created successfully.")
-        |> redirect(to: Routes.parking_path(conn, :show, parking))
+        |> redirect(to: Routes.parking_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         # unlock and rollback

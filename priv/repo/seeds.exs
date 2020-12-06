@@ -110,7 +110,7 @@ alias Parkin.{
 
 [
   %{
-    name: "A - Real Time",
+    name: "A / Real Time",
     desc: "Zone A Real Time Parking",
     zone: "A",
     type: "realtime",
@@ -120,7 +120,7 @@ alias Parkin.{
     status: "active"
   },
   %{
-    name: "A - Hourly",
+    name: "A / Hourly",
     desc: "Zone A Hourly Parking Service",
     zone: "A",
     type: "hourly",
@@ -130,7 +130,7 @@ alias Parkin.{
     status: "active"
   },
   %{
-    name: "B - Real Time",
+    name: "B / Real Time",
     desc: "Zone B Real Time Parking",
     zone: "B",
     type: "realtime",
@@ -140,7 +140,7 @@ alias Parkin.{
     status: "active"
   },
   %{
-    name: "B - Hourly",
+    name: "B / Hourly",
     desc: "Zone B Hourly Parking Service",
     zone: "B",
     type: "hourly",
