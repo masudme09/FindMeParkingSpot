@@ -61,6 +61,14 @@ defmodule WhiteBreadContext do
       :timer.sleep(2000)
   end
 
+  def select_drop_down(drop_down_id, option) do
+    find_element(:css, "##{drop_down_id} option[value='#{option}']") |> click()
+  end
+
+  def select_drop_down_within(element, drop_down_id, option) do
+    find_within_element(element, :css, "##{drop_down_id} option[value='#{option}']") |> click()
+  end
+
   given_(~r/^the following users exist$/, fn state, %{table_data: table} ->
     table
     |> Enum.map(fn user -> User.changeset(%User{}, user) end)
@@ -259,24 +267,55 @@ defmodule WhiteBreadContext do
   end)
 
   given_ ~r/^I am logged in the system$/, fn state ->
+    user_registration("Masud Rana", "masudme09@gmail.com", "abcdefgh123", "123435")
+    user_login("masudme09@gmail.com", "abcdefgh123")
     {:ok, state}
   end
-  and_ ~r/^I am in parking search page and enter "(?<argument_one>[^"]+)" as destination$/,
-  fn state, %{argument_one: _argument_one} ->
+
+  and_ ~r/^I am in parking search page and enter "(?<destination_address>[^"]+)" as destination$/,
+  fn state, %{destination_address: destination_address} ->
+    :timer.sleep(5000)
+    navigate_to("/parking/search")
+    :timer.sleep(2000)
+    form = find_element(:id, "search-form")
+    searchfld = find_within_element(form, :id, "searchtext")
+    searchfld |> fill_field(destination_address)
+    click({:id, "submit-button"})
+    :timer.sleep(5000)
+    assert visible_in_page?(~r/Available Parking spaces/)
   {:ok, state}
   end
-  and_ ~r/^I have selected "(?<argument_one>[^"]+)" as my parking space and new parking page appears$/,
-  fn state, %{argument_one: _argument_one} ->
+
+
+  and_ ~r/^I have selected "(?<selected_place>[^"]+)" as my parking space and new parking page appears$/,
+  fn state, %{selected_place: selected_place} ->
+    :timer.sleep(5000)
+
+    find_element(:link_text, selected_place)
+    |> click()
+
+    :timer.sleep(5000)
+
     {:ok, state}
   end
-  when_ ~r/^I click on type checkbox and select "(?<argument_one>[^"]+)"  $/,
-  fn state, %{argument_one: _argument_one} ->
+  when_ ~r/^I click on type checkbox and select "(?<hourly>[^"]+)"  $/,
+  fn state, %{hourly: hourly} ->
+    :timer.sleep(2000)
+    select_drop_down("parking_type",hourly)
+    # find_element(:id, "parking_type")
+    # |> fill_field("Hourly")
+
   {:ok, state}
   end
   then_ ~r/^Hourly payment type will be selected $/, fn state ->
     {:ok, state}
   end
   then_ ~r/^Real time payment type will be selected $/, fn state ->
+    select_drop_down("parking_type","realtime")
+    # find_element(:id, "parking_type")
+    # |> fill_field("Real time")
+
+
     {:ok, state}
   end
 

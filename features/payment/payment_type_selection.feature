@@ -6,10 +6,10 @@ Feature: Select hourly or real time payment type selection
      Scenario: Hourly and real time payment type selection
          Given I am logged in the system
          And I am in parking search page and enter "Veski, Tartu, Estonia" as destination
-         And I have selected "Veski" as my parking space and new parking page appears
-         When I click on type checkbox and select "Hourly"  
+         And I have selected "Select Kastani" as my parking space and new parking page appears
+         When I click on type checkbox and select "hourly"  
          Then Hourly payment type will be selected 
-         When I click on type checkbox and select "Real time"  
+         When I click on type checkbox and select "realtime"  
          Then Real time payment type will be selected 
 
    
