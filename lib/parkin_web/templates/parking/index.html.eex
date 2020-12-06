@@ -13,12 +13,10 @@
 
       <td>
         <span><%= link "Show", to: Routes.parking_path(@conn, :show, parking) %></span>
-        <span><%= link "Edit", to: Routes.parking_path(@conn, :edit, parking) %></span>
-        <span><%= link "Delete", to: Routes.parking_path(@conn, :delete, parking), method: :delete, data: [confirm: "Are you sure?"] %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Parking", to: Routes.parking_path(@conn, :new) %></span>
+<span><%= link "New Parking", to: Routes.parkingsearch_path(@conn, :search) %></span>

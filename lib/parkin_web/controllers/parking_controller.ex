@@ -25,50 +25,54 @@ defmodule ParkinWeb.ParkingController do
 
   # end
 
-  def new(conn, %{"loc_lat_long" => loc_lat_long}) do
-    slot = Repo.get_by(Parkin.ParkingSearch.ParkingSlot, loc_lat_long: loc_lat_long)
+  def new(conn, params) do
+    loc_lat_long = params["loc_lat_long"]
 
-    case slot == nil do
+    slot =
+      case loc_lat_long do
+        nil -> nil
+        _ -> Repo.get_by(Parkin.ParkingSearch.ParkingSlot, loc_lat_long: loc_lat_long)
+      end
+
+    slot =
+      case slot == nil do
+        true ->
+          conn
+          |> put_flash(:error, "The selected slot has not been found")
+          |> redirect(to: Routes.parkingsearch_path(conn, :search))
+
+        _ ->
+          slot
+      end
+
+    case slot.reserved_slots + slot.available_slots - slot.total_slots >= slot.slot_buffer do
       true ->
         conn
-        |> put_flash(:error, "The selected slot has not been found")
+        |> put_flash(:error, "No free spaces left")
         |> redirect(to: Routes.parkingsearch_path(conn, :search))
 
       _ ->
-        case slot.available_slots <= 0 do
-          true ->
-            conn
-            |> put_flash(:error, "No free spaces left2")
-            |> redirect(to: Routes.parkingsearch_path(conn, :search))
-
-          _ ->
-            # user = Parkin.Authentication.load_current_user(conn)
-            # order = Repo.get_by(Parkin.Billing.Order, user_id: user.id, status: "active")
-
-            # case order == nil do
-            #   true ->
-            #     struct = Ecto.build_assoc(user, :order, %{
-
-            #                               })
-            # end
-
-            # Magic People Voodoo People
-            slot_data =
-              Enum.join(
-                [slot.parking_place, "| Free: ", slot.available_slots, " / ", slot.total_slots],
-                " "
-              )
-
-            changeset =
-              Sales.change_parking(%Parking{
-                type: "realtime",
-                slot: slot_data,
-                loc_lat_long: loc_lat_long
-              })
-
-            render(conn, "new.html", changeset: changeset)
-        end
+        nil
     end
+
+    changeset =
+      Sales.change_parking(%Parking{
+        type: "realtime",
+        slot:
+          Enum.join(
+            [
+              slot.parking_place,
+              "| Free: ",
+              slot.available_slots,
+              " / ",
+              slot.total_slots
+            ],
+            " "
+          ),
+        loc_lat_long: loc_lat_long
+      })
+
+    render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"parking" => parking_params}) do
