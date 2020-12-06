@@ -136,7 +136,11 @@ defmodule WhiteBreadContext do
     {:ok, state}
   end)
 
-
+  then_(~r/^I should receive a logout confirmation message$/, fn state ->
+    :timer.sleep(5000)
+    assert visible_in_page?(~r/Successful logout/)
+    {:ok, state}
+  end)
 
   given_(~r/^I am on the parking search page$/, fn state ->
     :timer.sleep(5000)
@@ -205,7 +209,43 @@ defmodule WhiteBreadContext do
   given_(
     ~r/^I am on the parking summary page for destination address "(?<destination_address>[^"]+)"$/,
     fn state, %{destination_address: destination_address} ->
+      :timer.sleep(2000)
+      navigate_to("/users/new")
+      :timer.sleep(2000)
+      fill_field({:id, "user_name"}, "Amigo Grande")
+      fill_field({:id, "user_username"}, "amigo@grande.mx")
+      fill_field({:id, "user_password"}, "qwerty")
+      fill_field({:id, "user_license_number"}, "12235443")
+      submit_btn =  find_element(:id, "submit-button")
+
+      submit_btn
+      |>click()
+      :timer.sleep(2000)
+
+
+      navigate_to("/sessions/new")
+      :timer.sleep(2000)
+
+
+      ssn_frm =  find_element(:id, "session-form")
+
+      ssn_frm
+      |>find_within_element(:id, "session_username")
+      |>fill_field("amigo@grande.mx")
+
+      ssn_frm
+      |>find_within_element(:id, "session_password")
+      |>fill_field("qwerty")
+
+      :timer.sleep(2000)
+      ssn_frm
+      |>find_within_element(:id, "submit-button")
+      |>click()
+
+      :timer.sleep(2000)
+
       navigate_to("/parking/search")
+      :timer.sleep(2000)
       form = find_element(:id, "search-form")
       searchfld = find_within_element(form, :id, "searchtext")
       searchfld |> fill_field(destination_address)
@@ -233,11 +273,4 @@ defmodule WhiteBreadContext do
     :timer.sleep(5000)
     {:ok, state}
   end)
-
-  then_(~r/^I should receive a logout confirmation message$/, fn state ->
-    :timer.sleep(5000)
-    assert visible_in_page?(~r/Successful logout/)
-    {:ok, state}
-  end)
-
 end

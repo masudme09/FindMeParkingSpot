@@ -29,7 +29,7 @@ defmodule Parkin.Accounts.User do
     |> cast_assoc(:payments)
     |> cast_assoc(:parkings)
     |> cast_assoc(:orders)
-    |> validate_required([:username, :name, :license_number, :type])
+    |> validate_required([:username, :name, :license_number ]) #:type
     |> unique_constraint(:username)
     |> validate_format(:username, ~r/@/, message: "Username must be an email address!")
     |> validate_length(:password, min: 6)
