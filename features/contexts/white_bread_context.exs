@@ -12,6 +12,8 @@ defmodule WhiteBreadContext do
     %{}
   end)
 
+
+
   scenario_starting_state(fn _state ->
     Hound.start_session()
     Ecto.Adapters.SQL.Sandbox.checkout(Parkin.Repo)
@@ -23,6 +25,49 @@ defmodule WhiteBreadContext do
     Ecto.Adapters.SQL.Sandbox.checkin(Parkin.Repo)
     Hound.end_session()
   end)
+
+  def user_login(username, password)  do
+    navigate_to("/sessions/new")
+    :timer.sleep(2000)
+    ssn_frm =  find_element(:id, "session-form")
+    ssn_frm
+    |>find_within_element(:id, "session_username")
+    |>fill_field(username)
+
+    ssn_frm
+    |>find_within_element(:id, "session_password")
+    |>fill_field(password)
+
+    :timer.sleep(2000)
+    ssn_frm
+    |>find_within_element(:id, "submit-button")
+    |>click()
+
+    :timer.sleep(2000)
+  end
+
+  def user_registration(name, username, password, licensenumber) do
+      :timer.sleep(2000)
+      navigate_to("/users/new")
+      :timer.sleep(2000)
+      fill_field({:id, "user_name"}, name)
+      fill_field({:id, "user_username"}, username)
+      fill_field({:id, "user_password"}, password)
+      fill_field({:id, "user_license_number"}, licensenumber)
+      submit_btn =  find_element(:id, "submit-button")
+
+      submit_btn
+      |>click()
+      :timer.sleep(2000)
+  end
+
+  def select_drop_down(drop_down_id, option) do
+    find_element(:css, "##{drop_down_id} option[value='#{option}']") |> click()
+  end
+
+  def select_drop_down_within(element, drop_down_id, option) do
+    find_within_element(element, :css, "##{drop_down_id} option[value='#{option}']") |> click()
+  end
 
   given_(~r/^the following users exist$/, fn state, %{table_data: table} ->
     table
@@ -184,37 +229,20 @@ defmodule WhiteBreadContext do
     {:ok, state}
   end
 
-  # given_(
-  #   ~r/^I am on the parking summary page for destination address "(?<destination_address>[^"]+)"$/,
-  #   fn state, %{destination_address: destination_address} ->
-  #     navigate_to("/parking/search")
-  #     form = find_element(:id, "search-form")
-  #     searchfld = find_within_element(form, :id, "searchtext")
-  #     searchfld |> fill_field(destination_address)
-  #     click({:id, "submit-button"})
-  #     :timer.sleep(20000)
-  #     assert visible_in_page?(~r/Available Parking spaces/)
-
-  #     {:ok, state}
-  #   end
-  # )
-
-  # when_ ~r/^I have selected parking location and I click on select button$/, fn state ->
-  # # then_ ~r/^I should not see available parking space summary on that location when parking slot is not available.$/, fn state ->
-  # #   :timer.sleep(5000)
-  # #   assert visible_in_page?(~r/No Available Parking spaces/)
-  # #   {:ok, state}
-  # # end
-
   given_(
     ~r/^I am on the parking summary page for destination address "(?<destination_address>[^"]+)"$/,
     fn state, %{destination_address: destination_address} ->
+      user_registration("Masud Rana", "masudme09@gmail.com", "abcdefgh123", "123435")
+      user_login("masudme09@gmail.com", "abcdefgh123")
+
+      :timer.sleep(5000)
       navigate_to("/parking/search")
+      :timer.sleep(2000)
       form = find_element(:id, "search-form")
       searchfld = find_within_element(form, :id, "searchtext")
       searchfld |> fill_field(destination_address)
       click({:id, "submit-button"})
-      :timer.sleep(20000)
+      :timer.sleep(5000)
       assert visible_in_page?(~r/Available Parking spaces/)
 
       {:ok, state}
@@ -237,4 +265,58 @@ defmodule WhiteBreadContext do
     :timer.sleep(5000)
     {:ok, state}
   end)
+
+  given_ ~r/^I am logged in the system$/, fn state ->
+    user_registration("Masud Rana", "masudme09@gmail.com", "abcdefgh123", "123435")
+    user_login("masudme09@gmail.com", "abcdefgh123")
+    {:ok, state}
+  end
+
+  and_ ~r/^I am in parking search page and enter "(?<destination_address>[^"]+)" as destination$/,
+  fn state, %{destination_address: destination_address} ->
+    :timer.sleep(5000)
+    navigate_to("/parking/search")
+    :timer.sleep(2000)
+    form = find_element(:id, "search-form")
+    searchfld = find_within_element(form, :id, "searchtext")
+    searchfld |> fill_field(destination_address)
+    click({:id, "submit-button"})
+    :timer.sleep(5000)
+    assert visible_in_page?(~r/Available Parking spaces/)
+  {:ok, state}
+  end
+
+
+  and_ ~r/^I have selected "(?<selected_place>[^"]+)" as my parking space and new parking page appears$/,
+  fn state, %{selected_place: selected_place} ->
+    :timer.sleep(5000)
+
+    find_element(:link_text, selected_place)
+    |> click()
+
+    :timer.sleep(5000)
+
+    {:ok, state}
+  end
+  when_ ~r/^I click on type checkbox and select "(?<hourly>[^"]+)"  $/,
+  fn state, %{hourly: hourly} ->
+    :timer.sleep(2000)
+    select_drop_down("parking_type",hourly)
+    # find_element(:id, "parking_type")
+    # |> fill_field("Hourly")
+
+  {:ok, state}
+  end
+  then_ ~r/^Hourly payment type will be selected $/, fn state ->
+    {:ok, state}
+  end
+  then_ ~r/^Real time payment type will be selected $/, fn state ->
+    select_drop_down("parking_type","realtime")
+    # find_element(:id, "parking_type")
+    # |> fill_field("Real time")
+
+
+    {:ok, state}
+  end
+
 end

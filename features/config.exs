@@ -4,6 +4,6 @@ defmodule WhiteBreadConfig do
   suite(
     name: "All",
     context: WhiteBreadContext,
-    feature_paths: ["features/accounts/","features/parkingsearch/"]
+    feature_paths: ["features/accounts/","features/parkingsearch/","features/payment/" ]
   )
 end
