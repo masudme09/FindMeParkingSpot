@@ -4,21 +4,36 @@
   <thead>
     <tr>
 
-      <th></th>
+      <th>Place</th>
+      <th>Zone / Type</th>
+      <th>LocLatLong</th>
+      <th>From</th>
+      <th>To</th>
+      <th>Price</th>
+      <th>Status</th>
+      <th>Payment</th>
+      <th>Extend</th>
+      <th>Pay</th>
     </tr>
   </thead>
   <tbody>
 <%= for parking <- @parkings do %>
     <tr>
-
+      <td><%= parking.order.comment %></td>
+      <td><%= parking.service.name %></td>
+      <td><%= parking.order.loc_lat_long %></td>
+      <td><%= parking.start %></td>
+      <td><%= parking.end %></td>
+      <td>$<%= parking.price %></td>
+      <td><%= parking.order.status %></td>
+      <td><%= parking.order.payment_status %></td>
+      <td><span><%= link "Extend", to: Routes.parking_path(@conn, :new, ["loc_lat_long": parking.order.loc_lat_long]) %></span></td>
       <td>
-        <span><%= link "Show", to: Routes.parking_path(@conn, :show, parking) %></span>
-        <span><%= link "Edit", to: Routes.parking_path(@conn, :edit, parking) %></span>
-        <span><%= link "Delete", to: Routes.parking_path(@conn, :delete, parking), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <span><%= link "Pay", to: Routes.payment_path(@conn, :new, ["order_id": parking.order.id]) %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Parking", to: Routes.parking_path(@conn, :new) %></span>
+<span><%= link "New Parking", to: Routes.parkingsearch_path(@conn, :search) %></span>

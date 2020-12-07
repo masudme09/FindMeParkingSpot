@@ -30,6 +30,12 @@
   </div>
 
   <div class="form-group">
+    <%= label user, :type, class: "control-label" %>
+    <%= select user, :type, ["Regular": "default", "Monthly": "monthly"] %>
+    <%= error_tag user, :type %>
+    </div>
+
+  <div class="form-group">
     <%= submit "Submit", id: "submit-button", class: "btn btn-primary" %>
   </div>
   <% end %>

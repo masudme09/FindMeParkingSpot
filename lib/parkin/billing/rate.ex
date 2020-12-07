@@ -3,9 +3,10 @@ defmodule Parkin.Billing.Rate do
   import Ecto.Changeset
 
   schema "rates" do
-    belongs_to :from_currency, Parkin.Billing.Currency, source: :from_currency_id
-    belongs_to :to_currency, Parkin.Billing.Currency, source: :to_currency_id
     field :rate, :integer
+
+    belongs_to :currency_from, Parkin.Billing.Currency
+    belongs_to :currency_to, Parkin.Billing.Currency
 
     timestamps()
   end
@@ -14,8 +15,8 @@ defmodule Parkin.Billing.Rate do
   def changeset(rate, attrs) do
     rate
     |> cast(attrs, [:rate])
-    |> cast_assoc(:from_currency)
-    |> cast_assoc(:to_currency)
-    |> validate_required([:from_currency, :to_currency, :rate])
+    |> cast_assoc(:currency_from)
+    |> cast_assoc(:currency_to)
+    |> validate_required([:currency_from, :currency_to, :rate])
   end
 end

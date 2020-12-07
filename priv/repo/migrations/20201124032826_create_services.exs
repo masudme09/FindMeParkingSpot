@@ -5,6 +5,7 @@ defmodule Parkin.Repo.Migrations.CreateServices do
     create table(:services) do
       add :name, :string
       add :desc, :string
+      add :zone, :string
       add :type, :string, default: "realtime"
       add :duration, :integer
       add :price, :integer

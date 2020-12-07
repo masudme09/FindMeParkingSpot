@@ -33,42 +33,54 @@ alias Parkin.{
     loc_lat_long: "58.37801,26.711",
     zone: "A",
     total_slots: 200,
-    available_slots: 5
+    available_slots: 195,
+    reserved_slots: 6,
+    slot_buffer: 3
   },
   %{
     parking_place: "Kastani",
     loc_lat_long: "58.37908,26.70908",
     zone: "A",
     total_slots: 200,
-    available_slots: 5
+    available_slots: 5,
+    reserved_slots: 195,
+    slot_buffer: 3
   },
   %{
     parking_place: "Kooli",
     loc_lat_long: "58.37799,26.70736",
     zone: "A",
     total_slots: 200,
-    available_slots: 5
+    available_slots: 200,
+    reserved_slots: 0,
+    slot_buffer: 3
   },
   %{
     parking_place: "Lossi",
     loc_lat_long: "58.37927,26.71754",
     zone: "B",
     total_slots: 200,
-    available_slots: 5
+    available_slots: 200,
+    reserved_slots: 0,
+    slot_buffer: 3
   },
   %{
     parking_place: "Ülikooli",
     loc_lat_long: "58.37906,26.72253",
     zone: "B",
     total_slots: 200,
-    available_slots: 5
+    available_slots: 200,
+    reserved_slots: 0,
+    slot_buffer: 3
   },
   %{
     parking_place: "Küüni",
     loc_lat_long: "58.37875,26.72456",
     zone: "B",
     total_slots: 200,
-    available_slots: 5
+    available_slots: 200,
+    reserved_slots: 0,
+    slot_buffer: 3
   }
 ]
 |> Enum.map(fn parking_data -> ParkingSlot.changeset(%ParkingSlot{}, parking_data) end)
@@ -98,8 +110,9 @@ alias Parkin.{
 
 [
   %{
-    name: "Real Time",
-    desc: "Real Time Parking",
+    name: "A / Real Time",
+    desc: "Zone A Real Time Parking",
+    zone: "A",
     type: "realtime",
     duration: 1,
     price: 1,
@@ -107,11 +120,32 @@ alias Parkin.{
     status: "active"
   },
   %{
-    name: "Hourly",
-    desc: "Hourly Parking Service",
+    name: "A / Hourly",
+    desc: "Zone A Hourly Parking Service",
+    zone: "A",
     type: "hourly",
     duration: 60,
     price: 50,
+    # currency: "TOK",
+    status: "active"
+  },
+  %{
+    name: "B / Real Time",
+    desc: "Zone B Real Time Parking",
+    zone: "B",
+    type: "realtime",
+    duration: 1,
+    price: 2,
+    # currency: "TOK",
+    status: "active"
+  },
+  %{
+    name: "B / Hourly",
+    desc: "Zone B Hourly Parking Service",
+    zone: "B",
+    type: "hourly",
+    duration: 60,
+    price: 100,
     # currency: "TOK",
     status: "active"
   }
@@ -162,6 +196,7 @@ alias Parkin.{
   %Service{
     name: data[:name],
     desc: data[:desc],
+    zone: data[:zone],
     type: data[:type],
     duration: data[:duration],
     price: data[:price],

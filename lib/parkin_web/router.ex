@@ -23,12 +23,7 @@ defmodule ParkinWeb.Router do
 
   scope "/", ParkinWeb do
     pipe_through [:browser, :browser_auth, :ensure_auth]
-    resources "/orders", OrderController, only: [:index, :new, :create, :show]
-  end
-
-  scope "/", ParkinWeb do
-    pipe_through [:browser, :browser_auth, :ensure_auth]
-    resources "/payments", PaymentController, only: [:index, :new, :create]
+    resources "/parkings", ParkingController, only: [:index, :new, :create, :show]
   end
 
   scope "/", ParkinWeb do
@@ -49,6 +44,16 @@ defmodule ParkinWeb.Router do
   scope "/", ParkinWeb do
     pipe_through [:browser, :browser_auth]
     get "/", PageController, :index
+  end
+
+  # scope "/", ParkinWeb do
+  #   pipe_through [:browser, :browser_auth, :ensure_auth]
+  #   resources "/orders", OrderController, only: [:index, :create, :show]
+  # end
+
+  scope "/", ParkinWeb do
+    pipe_through [:browser, :browser_auth, :ensure_auth]
+    resources "/payments", PaymentController, only: [:index, :new, :create, :show]
   end
 
   scope "/", ParkinWeb do

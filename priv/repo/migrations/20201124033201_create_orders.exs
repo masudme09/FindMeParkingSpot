@@ -12,6 +12,7 @@ defmodule Parkin.Repo.Migrations.CreateOrders do
       # add :end, :utc_datetime
       ## add :currency_id, references(:currencies)
       add :payment_id, references(:payments)
+      add :loc_lat_long, :string
       add :comment, :string, default: "Parking"
       add :status, :string, default: "created"
 
