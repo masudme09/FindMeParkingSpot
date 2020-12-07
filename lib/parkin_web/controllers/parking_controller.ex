@@ -19,10 +19,6 @@ defmodule ParkinWeb.ParkingController do
     render(conn, "index.html", parkings: parkings)
   end
 
-  @spec new(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def new(conn, %{"loc_lat_long" => loc_lat_long}) do
-      slot = Parkin.Helper.Summary.get_zone_data_from(loc_lat_long)
-      
   def new(conn, params) do
     loc_lat_long = params["loc_lat_long"]
 
