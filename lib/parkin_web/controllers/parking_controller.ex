@@ -19,20 +19,6 @@ defmodule ParkinWeb.ParkingController do
     render(conn, "index.html", parkings: parkings)
   end
 
-  # def _get_free_slots(conn, slot) do
-  #   slot =
-  #     case slot == nil do
-  #       true ->
-  #         conn
-  #         |> put_flash(:error, "Something has gone horribly wrong")
-  #         |> redirect(to: Routes.parkingsearch_path(conn, :search))
-
-  #       _ ->
-  #         slot
-  #     end
-
-  # end
-
   def new(conn, params) do
     loc_lat_long = params["loc_lat_long"]
 
@@ -116,8 +102,6 @@ defmodule ParkinWeb.ParkingController do
         loc_lat_long: loc_lat_long
       })
 
-    IO.inspect(order)
-
     case slot.reserved_slots + slot.available_slots - slot.total_slots >= slot.slot_buffer and
            order == nil do
       true ->
@@ -129,7 +113,7 @@ defmodule ParkinWeb.ParkingController do
         nil
     end
 
-    case order.loc_lat_long != loc_lat_long do
+    case order != nil and order.loc_lat_long != loc_lat_long do
       true ->
         conn
         |> put_flash(:error, "You have active parking in another slot")

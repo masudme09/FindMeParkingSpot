@@ -2,4 +2,4 @@
 
 <%= render "form.html", Map.put(assigns, :action, Routes.payment_path(@conn, :create)) %>
 
-<span><%= link "Back", to: Routes.payment_path(@conn, :index) %></span>
+<span><%= link "Back", to: Routes.parking_path(@conn, :index) %></span>
