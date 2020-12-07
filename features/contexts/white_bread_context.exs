@@ -259,13 +259,16 @@ defmodule WhiteBreadContext do
     {:ok, state}
   end)
 
-  then_(~r/^I should see parking space detail at that location.$/, fn state ->
+  then_(~r/^I should see new parking creation page for that location.$/, fn state ->
     :timer.sleep(5000)
-    assert visible_in_page?(~r/Parking summary/)
+    slot = find_element(:id, "parking_slot")
+    #IO.inspect(attribute_value(slot, "value"))
+    assert  String.contains?(attribute_value(slot,"value"), "Kastani") == true
     :timer.sleep(5000)
     {:ok, state}
   end)
 
+  #3.1 payment type selection
   given_ ~r/^I am logged in the system$/, fn state ->
     user_registration("Masud Rana", "masudme09@gmail.com", "abcdefgh123", "123435")
     user_login("masudme09@gmail.com", "abcdefgh123")
@@ -302,9 +305,6 @@ defmodule WhiteBreadContext do
   fn state, %{hourly: hourly} ->
     :timer.sleep(2000)
     select_drop_down("parking_type",hourly)
-    # find_element(:id, "parking_type")
-    # |> fill_field("Hourly")
-
   {:ok, state}
   end
   then_ ~r/^Hourly payment type will be selected $/, fn state ->
@@ -312,12 +312,9 @@ defmodule WhiteBreadContext do
   end
   then_ ~r/^Real time payment type will be selected $/, fn state ->
     select_drop_down("parking_type","realtime")
-    # find_element(:id, "parking_type")
-    # |> fill_field("Real time")
-
-
     {:ok, state}
   end
+
 
   and_ ~r/^I click on type dropdown and select "(?<hourly>[^"]+)" $/,
   fn state, %{hourly: hourly} ->
@@ -372,7 +369,6 @@ defmodule WhiteBreadContext do
     assert visible_in_page?(~r/Selected end date is before selected start date/)
     {:ok, state}
   end
-
 
 
 

@@ -6,4 +6,4 @@ Feature: Interactive Search of Parking Space
     Scenario: Select available parking space
         Given I am on the parking summary page for destination address "Veski, Tartu, Estonia"
         When I have selected parking location and I click on select button
-        Then I should see parking space detail at that location.
+        Then I should see new parking creation page for that location.
