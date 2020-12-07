@@ -332,6 +332,7 @@ fn state, %{argument_one: _argument_one} ->
   {:ok, state}
 end
 
+<<<<<<< HEAD
 and_ ~r/^I select "(?<argument_one>[^"]+)"  $/,
 fn state, %{argument_one: _argument_one} ->
   {:ok, state}
@@ -340,6 +341,62 @@ end
 then_ ~r/^I should able to see calculated price as Real time rate for that booking$/, fn state ->
   {:ok, state}
 end
+=======
+  and_ ~r/^I click on type dropdown and select "(?<hourly>[^"]+)" $/,
+  fn state, %{hourly: hourly} ->
+    select_drop_down("parking_type",hourly)
+    {:ok, state}
+  end
+
+  and_ ~r/^I enter starting date as "(?<year>[^"]+)" year "(?<month>[^"]+)" month "(?<day>[^"]+)" day "(?<hour>[^"]+)" hour and "(?<minutes>[^"]+)" minutes$/,
+  fn state, %{year: year,
+              month: month,
+              day: day,
+              hour: hour,
+              minutes: minutes
+              } ->
+    select_drop_down("parking_start_year",year)
+    select_drop_down("parking_start_month",month)
+    select_drop_down("parking_start_day",day)
+    select_drop_down("parking_start_hour",hour)
+    select_drop_down("parking_start_minute",minutes)
+
+    {:ok, state}
+  end
+
+  and_ ~r/^I enter ending date as "(?<year>[^"]+)" year "(?<month>[^"]+)" month "(?<day>[^"]+)" day "(?<hour>[^"]+)" hour and "(?<minutes>[^"]+)" minutes$/,
+  fn state, %{year: year,
+              month: month,
+              day: day,
+              hour: hour,
+              minutes: minutes
+              } ->
+    select_drop_down("parking_end_year",year)
+    select_drop_down("parking_end_month",month)
+    select_drop_down("parking_end_day",day)
+    select_drop_down("parking_end_hour",hour)
+    select_drop_down("parking_end_minute",minutes)
+    {:ok, state}
+  end
+
+  when_ ~r/^I clicked submit button $/, fn state ->
+    click({:id, "submit-button"})
+    {:ok, state}
+  end
+
+  then_ ~r/^It should shows payment created successfully as message.$/, fn state ->
+    :timer.sleep(5000)
+    assert visible_in_page?(~r/Parking created successfully./)
+    {:ok, state}
+  end
+
+  then_ ~r/^It should show error message.$/, fn state ->
+    :timer.sleep(5000)
+    assert visible_in_page?(~r/Selected end date is before selected start date/)
+    {:ok, state}
+  end
+
+>>>>>>> 0c647f00057e09b65d7a544bcf62824b4f30462e
 
 
 end
