@@ -315,7 +315,31 @@ defmodule WhiteBreadContext do
     {:ok, state}
   end
 
+#2.3 hourly payment estimation based on leaving hour
+and_ ~r/^I have entered my leaving hour$/, fn state ->
+  {:ok, state}
+end
+when_ ~r/^I have clicked on submit button$/, fn state ->
+  {:ok, state}
+end
+then_ ~r/^I should able to see calculated price as hourly rate for that booking$/, fn state ->
+  {:ok, state}
+end
 
+#2.4 real time payment estimation based on leaving hour
+and_ ~r/^I have selected "(?<argument_one>[^"]+)" as my parking space and new parking page appears  $/,
+fn state, %{argument_one: _argument_one} ->
+  {:ok, state}
+end
+
+and_ ~r/^I select "(?<argument_one>[^"]+)"  $/,
+fn state, %{argument_one: _argument_one} ->
+  {:ok, state}
+end
+
+then_ ~r/^I should able to see calculated price as Real time rate for that booking$/, fn state ->
+  {:ok, state}
+end
 
 
 end
