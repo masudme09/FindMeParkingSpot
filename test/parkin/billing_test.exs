@@ -1,4 +1,4 @@
-defmodule Parkin.BillingTest do
+last_push_masdefmodule Parkin.BillingTest do
   use Parkin.DataCase
 
   alias Parkin.Billing

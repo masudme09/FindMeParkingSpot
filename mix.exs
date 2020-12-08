@@ -52,7 +52,8 @@ defmodule Parkin.MixProject do
       {:pbkdf2_elixir, "~> 1.0"},
       {:httpoison, "~> 1.6"},
       {:poison, "~> 3.1"},
-      {:floki, "~> 0.29.0"}
+      {:floki, "~> 0.29.0"},
+      {:tzdata, "~> 1.0.5"}
     ]
   end
 

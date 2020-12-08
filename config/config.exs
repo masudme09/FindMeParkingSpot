@@ -33,3 +33,5 @@ import_config "#{Mix.env()}.exs"
 config :parkin, Parkin.Guardian,
   issuer: "parkin",
   secret_key: "Hmj8oL6MD14I7n/Ok2XFWplkhOmegE+sUqU5CRjm5F+ZgGRJ9+z/BrYHhCUdbH/P"
+
+config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase

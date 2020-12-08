@@ -114,7 +114,7 @@ defmodule WhiteBreadContext do
       pswdfld |> fill_field(password)
       submit |> click()
 
-      :timer.sleep(3000)
+      :timer.sleep(2000)
       assert visible_in_page?(~r/Welcome #{state[:username]}/)
       {:ok, state}
     end
@@ -153,42 +153,42 @@ defmodule WhiteBreadContext do
     find_element(:link_text, "Log out")
     |> click()
 
-    :timer.sleep(3000)
+    :timer.sleep(2000)
     {:ok, state}
   end)
 
   then_(~r/^I should receive a registration confirmation message$/, fn state ->
-    :timer.sleep(5000)
+    :timer.sleep(3000)
     assert visible_in_page?(~r/User created successfully./)
     {:ok, state}
   end)
 
   then_(~r/^I should receive a registration rejection message$/, fn state ->
-    :timer.sleep(5000)
+    :timer.sleep(3000)
     assert visible_in_page?(~r/Oops, something went wrong! Please check the errors below./)
     {:ok, state}
   end)
 
   then_(~r/^I should receive a login confirmation message$/, fn state ->
-    :timer.sleep(5000)
+    :timer.sleep(3000)
     assert visible_in_page?(~r/Welcome #{state[:username]}/)
     {:ok, state}
   end)
 
   then_(~r/^I should receive a login rejection message$/, fn state ->
-    :timer.sleep(5000)
+    :timer.sleep(3000)
     assert visible_in_page?(~r/Bad Credentials/)
     {:ok, state}
   end)
 
   then_(~r/^I should receive a logout confirmation message$/, fn state ->
-    :timer.sleep(5000)
+    :timer.sleep(3000)
     assert visible_in_page?(~r/Successful logout/)
     {:ok, state}
   end)
 
   given_(~r/^I am on the parking search page$/, fn state ->
-    :timer.sleep(5000)
+    :timer.sleep(3000)
     navigate_to("/parking/search")
     {:ok, state}
   end)
@@ -196,13 +196,13 @@ defmodule WhiteBreadContext do
   and_(
     ~r/^I have search for "(?<destination_address>[^"]+)" as destination location on the search page$/,
     fn state, %{destination_address: destination_address} ->
-      :timer.sleep(5000)
+      :timer.sleep(3000)
 
       form = find_element(:id, "search-form")
       searchfld = find_within_element(form, :id, "searchtext")
       searchfld |> fill_field(destination_address)
 
-      :timer.sleep(5000)
+      :timer.sleep(3000)
 
       {:ok, state}
     end
@@ -217,14 +217,14 @@ defmodule WhiteBreadContext do
   then_(
     ~r/^I should see available parking space summary on that location when parking slot is available.$/,
     fn state ->
-      :timer.sleep(5000)
+      :timer.sleep(3000)
       assert visible_in_page?(~r/Available Parking spaces/)
       {:ok, state}
     end
   )
 
   then_ ~r/^I should not see available parking space summary on that location when parking slot is not available.$/, fn state ->
-    :timer.sleep(5000)
+    :timer.sleep(3000)
     assert visible_in_page?(~r/No available Parking spaces/)
     {:ok, state}
   end
@@ -235,14 +235,14 @@ defmodule WhiteBreadContext do
       user_registration("Masud Rana", "masudme09@gmail.com", "abcdefgh123", "123435")
       user_login("masudme09@gmail.com", "abcdefgh123")
 
-      :timer.sleep(5000)
+      :timer.sleep(2000)
       navigate_to("/parking/search")
       :timer.sleep(2000)
       form = find_element(:id, "search-form")
       searchfld = find_within_element(form, :id, "searchtext")
       searchfld |> fill_field(destination_address)
       click({:id, "submit-button"})
-      :timer.sleep(5000)
+      :timer.sleep(2000)
       assert visible_in_page?(~r/Available Parking spaces/)
 
       {:ok, state}
@@ -250,21 +250,21 @@ defmodule WhiteBreadContext do
   )
 
   when_(~r/^I have selected parking location and I click on select button$/, fn state ->
-    :timer.sleep(5000)
+    :timer.sleep(2000)
 
     find_element(:link_text, "Select Kastani")
     |> click()
 
-    :timer.sleep(5000)
+    :timer.sleep(2000)
     {:ok, state}
   end)
 
   then_(~r/^I should see new parking creation page for that location.$/, fn state ->
-    :timer.sleep(5000)
+    :timer.sleep(2000)
     slot = find_element(:id, "parking_slot")
     #IO.inspect(attribute_value(slot, "value"))
     assert  String.contains?(attribute_value(slot,"value"), "Kastani") == true
-    :timer.sleep(5000)
+    :timer.sleep(2000)
     {:ok, state}
   end)
 
@@ -277,14 +277,14 @@ defmodule WhiteBreadContext do
 
   and_ ~r/^I am in parking search page and enter "(?<destination_address>[^"]+)" as destination$/,
   fn state, %{destination_address: destination_address} ->
-    :timer.sleep(5000)
+    :timer.sleep(2000)
     navigate_to("/parking/search")
     :timer.sleep(2000)
     form = find_element(:id, "search-form")
     searchfld = find_within_element(form, :id, "searchtext")
     searchfld |> fill_field(destination_address)
     click({:id, "submit-button"})
-    :timer.sleep(5000)
+    :timer.sleep(2000)
     assert visible_in_page?(~r/Available Parking spaces/)
   {:ok, state}
   end
@@ -292,12 +292,12 @@ defmodule WhiteBreadContext do
 
   and_ ~r/^I have selected "(?<selected_place>[^"]+)" as my parking space and new parking page appears$/,
   fn state, %{selected_place: selected_place} ->
-    :timer.sleep(5000)
+    :timer.sleep(2000)
 
     find_element(:link_text, selected_place)
     |> click()
 
-    :timer.sleep(5000)
+    :timer.sleep(2000)
 
     {:ok, state}
   end
@@ -318,32 +318,71 @@ defmodule WhiteBreadContext do
 #2.3 hourly payment estimation based on leaving hour
 and_ ~r/^I have entered my leaving hour$/, fn state ->
   :timer.sleep(2000)
-  endhour = find_element(:id, "parking_end_hour")
-  curVal = attribute_value(endhour, "value")
-  IO.inspect(curVal)
-  upVal = curVal + "1" #not considering cases like 23:30
-  select_drop_down("parking_end_hour",upVal)
+  curValhr=find_element(:id, "parking_start_hour")
+        |>attribute_value("value")
+        |>String.to_integer()
+
+  if curValhr >= 23 do
+    curValhr1 = Integer.to_string(1) #converting to estonian time
+    select_drop_down("parking_start_hour", curValhr1 )
+  else
+    curValhr1 = Integer.to_string(curValhr + 2) #converting to estonian time
+    select_drop_down("parking_start_hour", curValhr1 )
+  end
+
+  curValm1=find_element(:id, "parking_start_minute")
+        |>attribute_value("value")
+        |>String.to_integer()
+
+  upVal0 = Integer.to_string(curValm1 + 2)
+
+  select_drop_down("parking_start_minute",upVal0)
+
+  endday = find_element(:id, "parking_end_day")
+  curValday = attribute_value(endday, "value")
+  IO.inspect(curValday)
+  upValday = Integer.to_string(String.to_integer(curValday) + 1)  #not considering cases like 23:30
+  IO.inspect(upValday)
+  if (String.to_integer(curValday) + 1) > 31 do
+    select_drop_down("parking_end_day","2")
+  else
+    select_drop_down("parking_end_day", upValday)
+  end
   {:ok, state}
 end
 when_ ~r/^I have clicked on submit button$/, fn state ->
+  :timer.sleep(2000)
+  find_element(:id, "submit-button")
+  |>click()
+  :timer.sleep(2000)
   {:ok, state}
 end
 then_ ~r/^I should able to see calculated price as hourly rate for that booking$/, fn state ->
+  assert visible_in_page?(~r/Parking created successfully./)
   {:ok, state}
 end
 
 #2.4 real time payment estimation based on leaving hour
-and_ ~r/^I have selected "(?<argument_one>[^"]+)" as my parking space and new parking page appears  $/,
-fn state, %{argument_one: _argument_one} ->
+and_ ~r/^I have selected "(?<selected_place>[^"]+)" as my parking space and new parking page appears  $/,
+fn state, %{selected_place: selected_place} ->
+  :timer.sleep(2000)
+  find_element(:link_text, selected_place)
+  |> click()
+  :timer.sleep(2000)
+
   {:ok, state}
 end
 
-and_ ~r/^I select "(?<argument_one>[^"]+)"  $/,
-fn state, %{argument_one: _argument_one} ->
+and_ ~r/^I select "(?<realtime>[^"]+)"  $/,
+fn state, %{realtime: realtime} ->
+  :timer.sleep(2000)
+  select_drop_down("parking_type",realtime)
+  :timer.sleep(2000)
   {:ok, state}
 end
 
 then_ ~r/^I should able to see calculated price as Real time rate for that booking$/, fn state ->
+  assert visible_in_page?(~r/Parking created successfully./)
   {:ok, state}
 end
 end
